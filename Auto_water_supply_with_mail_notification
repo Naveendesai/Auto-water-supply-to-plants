@@ -1,0 +1,46 @@
+import RPi.GPIO as GPIO
+import time
+import smtplib
+from email.MIMEMultipart import MIMEMultipart
+from email.MIMEText import MIMEText
+from email.MIMEBase import MIMEBase
+from email import encoders
+fromaddr="raspberrypi7515@gmail.com"
+toaddr="naveendesai515jo@gmail.com"
+mail=MIMEMultipart()
+mail['From']=fromaddr
+mail['To']=toaddr
+mail['Subject']="Warning"
+body="There is no water supply to the plants Motor is ON"
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(14,GPIO.IN)
+GPIO.setup(17,GPIO.OUT)
+GPIO.setup(18,GPIO.OUT)
+GPIO.setup(27,GPIO.OUT)
+
+def sendMail(data):
+    mail.attach(MIMEText(body, 'plain'))
+    print data
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.starttls()
+    server.login(fromaddr, "GOUTHAMINAVEEN")
+    text = mail.as_string()
+    server.sendmail(fromaddr, toaddr, text)
+    server.quit()
+while True:
+    input_state = GPIO.input(14)
+    if input_state == False:
+      GPIO.output(18,1)
+      GPIO.output(17,0)
+      GPIO.output(27,0)
+      print("Moister is there,No water supply"
+      time.sleep(1)
+    else:
+      GPIO.output(17,1)
+      GPIO.output(27,1)
+      GPIO.output(18,0)
+      print("No Moister,Water supply is started")
+      time.sleep(1)
+      data=1
+      sendMail(data)
