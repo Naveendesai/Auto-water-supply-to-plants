@@ -5,8 +5,8 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from email.MIMEBase import MIMEBase
 from email import encoders
-fromaddr="raspberrypi7515@gmail.com"
-toaddr="naveendesai515jo@gmail.com"
+fromaddr="Raspberrypi@email.com" #raspberrypi mail address
+toaddr="Receivermail@email.com"  #user mail address
 mail=MIMEMultipart()
 mail['From']=fromaddr
 mail['To']=toaddr
@@ -24,7 +24,7 @@ def sendMail(data):
     print data
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
-    server.login(fromaddr, "GOUTHAMINAVEEN")
+    server.login(fromaddr, "password of raspberrypi mail address")  #use the raspberrypi mail address
     text = mail.as_string()
     server.sendmail(fromaddr, toaddr, text)
     server.quit()
